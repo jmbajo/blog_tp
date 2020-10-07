@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,3 +21,10 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+Route::get('/about', [App\Http\Controllers\PagesController::class, 'about']);
+Route::get('/index', [App\Http\Controllers\PagesController::class, 'index']);
+
+// Genero todas las rutas de las acciones de PostsController
+Route::resource('posts', '\App\Http\Controllers\PostsController');
