@@ -33,7 +33,9 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+                      <li class="nav-item">
+                          <a class="nav-link" href="/posts/create">Nuevo Post</a>
+                      </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -81,6 +83,7 @@
         </nav>
 
         <main class="py-4 container" >
+            @include('inc.mensajes')
             @yield('content')
         </main>
     </div>

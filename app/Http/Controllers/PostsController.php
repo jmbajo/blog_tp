@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Post;
 
 class PostsController extends Controller
 {
@@ -13,7 +14,8 @@ class PostsController extends Controller
      */
     public function index()
     {
-        return view('posts.index');
+        $posts = Post::all();
+        return view('posts.index', ["posts" => $posts]);
     }
 
     /**
@@ -34,7 +36,17 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+          'titulo' => 'required',
+          'contenido' => 'required',
+        ]);
+
+        $post = new Post();
+        $post->titulo = $request->input('titulo');
+        $post->contenido = $request->input('contenido');
+        $post->save();
+
+        return redirect('/posts')->with("success", "Post Creado Exitosamente");
     }
 
     /**
@@ -45,7 +57,8 @@ class PostsController extends Controller
      */
     public function show($id)
     {
-        //
+        $post = Post::find($id);
+        return view("posts.show", ["post" => $post]);
     }
 
     /**
@@ -56,7 +69,8 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $post = Post::find($id);
+        return view("posts.edit", ["post" => $post]);
     }
 
     /**
@@ -68,7 +82,17 @@ class PostsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+          'titulo' => 'required',
+          'contenido' => 'required',
+        ]);
+
+        $post = Post::find($id);
+        $post->titulo = $request->input('titulo');
+        $post->contenido = $request->input('contenido');
+        $post->save();
+
+        return redirect('/posts')->with("success", "Post Actualizado Exitosamente");
     }
 
     /**
@@ -79,6 +103,9 @@ class PostsController extends Controller
      */
     public function destroy($id)
     {
-        //
+      $post = Post::find($id);
+      $post->delete();
+
+      return redirect('/posts')->with("success", "Post Eliminado Exitosamente");
     }
 }
