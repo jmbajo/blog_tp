@@ -6,10 +6,19 @@
 
 <p> {{$post->contenido}} </p>
 
-<a href="/posts/{{$post->id}}/edit">Editar entrada...</a>
 
-{!! Form::open(['action' => ['App\Http\Controllers\PostsController@destroy', $post->id], 'method'=> 'DELETE']) !!}
-  {{ Form::submit("Eliminar!") }}
-{!! Form::close() !!}
+@if (!Auth::guest())
+  @if(Auth::user()->id == $post->user_id)
+
+    <a href="/posts/{{$post->id}}/edit">Editar entrada...</a>
+
+    {!! Form::open(['action' => ['App\Http\Controllers\PostsController@destroy', $post->id], 'method'=> 'DELETE']) !!}
+      {{ Form::submit("Eliminar!") }}
+    {!! Form::close() !!}
+
+  @endif
+
+@endif
+
 
 @endsection
