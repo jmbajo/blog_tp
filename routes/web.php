@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Models\Tag;
+use App\Models\Post;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,9 +17,29 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/demo', function ()
+{
+    $tag = Tag::first();
+    $post = Post::first();
+
+    // $post->tags()->sync([
+    //   5 => ["extra" => "saf asdf asdf asdf a"]
+    // ]);
+
+    return $post->tags->first()->pivot->extra;
+
+    // return $post->tags->all();
+
+});
+
+
+
 
 Auth::routes();
 
