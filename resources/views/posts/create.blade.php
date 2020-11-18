@@ -3,7 +3,7 @@
 @section('content')
 <h1> Crear Entrada Blog</h1>
 
-{!! Form::open(['action' => 'App\Http\Controllers\PostsController@store', 'method'=> 'POST']) !!}
+{!! Form::open(['action' => 'App\Http\Controllers\PostsController@store', 'method'=> 'POST', 'enctype' => 'multipart/form-data']) !!}
 
   <div class="form-group">
       {{Form::label('titulo', 'Titulo' ) }}
@@ -13,6 +13,10 @@
   <div class="form-group">
       {{Form::label('contenido', 'Contenido' ) }}
       {{Form::textarea('contenido', '', ['class' => 'form-control', 'placeholder'=>'Ingrese texto de la nueva entrada...']) }}
+  </div>
+
+  <div class="form-group">
+      {{Form::file('portada') }}
   </div>
 
     {{ Form::submit("Guardar", ['class'=> 'btn btn-primary']) }}

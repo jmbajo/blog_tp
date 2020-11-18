@@ -8,11 +8,10 @@ use App\Models\Post;
 class PostsController extends Controller
 {
 
-  public function __construct()
-  {
-      $this->middleware('auth', ["except" => ["index", "show"]]);
-  }
-
+    public function __construct()
+    {
+        $this->middleware('auth', ["except" => ["index", "show"]]);
+    }
 
     /**
      * Display a listing of the resource.
@@ -22,7 +21,8 @@ class PostsController extends Controller
     public function index()
     {
         $posts = Post::all();
-        return view('posts.index', ["posts" => $posts]);
+        return $posts;
+        //return view('posts.index', ["posts" => $posts]);
     }
 
     /**
@@ -32,7 +32,6 @@ class PostsController extends Controller
      */
     public function create()
     {
-
         return view('posts.create');
     }
 
@@ -47,13 +46,35 @@ class PostsController extends Controller
         $this->validate($request, [
           'titulo' => 'required',
           'contenido' => 'required',
+          'portada' => 'image|nullable|max:1999'
         ]);
+
+        // procesar imagen y guardarla en el servidor
+        if ($request->hasFile('portada')) {
+          // procesar y guarda la imagen
+            $nombre_original = $request->file('portada')->getClientOriginalName();
+
+            // separar nombre de archivo de extension
+            $nombre = pathinfo($nombre_original, PATHINFO_FILENAME);
+            $extension = $request->file('portada')->getClientOriginalExtension();
+
+            $nombre_a_guardar = $nombre . "_" . time(). "." . $extension;
+
+            $request->file('portada')->storeAs('public/portadas', $nombre_a_guardar);
+
+        } else {
+          // guardar una imagen de muestra
+          $nombre_a_guardar = "noimage.png";
+        }
 
         $post = new Post();
         $post->titulo = $request->input('titulo');
         $post->contenido = $request->input('contenido');
         $post->user_id = auth()->user()->id;
+        $post->path_imagen = $nombre_a_guardar;
         $post->save();
+
+
 
         return redirect('/posts')->with("success", "Post Creado Exitosamente");
     }
